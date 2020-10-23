@@ -236,4 +236,13 @@ class ClippedTriangleSquareView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+
+        fun create(activity : Activity) : ClippedTriangleSquareView {
+            val view : ClippedTriangleSquareView = ClippedTriangleSquareView(activity)
+            activity.setContentView(view)
+            return view
+        }
+    }
 }
