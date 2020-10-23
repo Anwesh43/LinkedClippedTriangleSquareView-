@@ -27,7 +27,7 @@ val parts : Int = 8
 val scGap : Float = 0.02f / parts
 val strokeFactor : Float = 90f
 val sizeFactor : Float = 3.7f
-val delay : Long = 20
+val delay : Long = 15
 val backColor : Int = Color.parseColor("#BDBDBD")
 val deg : Float = 90f
 
@@ -46,7 +46,7 @@ fun Canvas.drawTriangleSquare(sf : Float, size : Float, paint : Paint) {
     drawLine(0f, size / 2, size * 0.5f * sf2, size / 2 - size * 0.5f * sf2, paint)
     drawLine(size / 2, 0f, size / 2, -size * 0.5f * sf3, paint)
     drawLine(size / 2, -size * 0.5f, size / 2 - size * sf4, -size * 0.5f, paint)
-    drawLine(-size / 2, -size / 2, size / 2, size * 0.5f * (sf5 - 1), paint)
+    drawLine(-size / 2, -size / 2, -size / 2, size * 0.5f * (sf5 - 1), paint)
 }
 
 fun Canvas.drawTriangleSquareFillPath(sf6 : Float, size : Float, paint : Paint) {
@@ -232,7 +232,7 @@ class ClippedTriangleSquareView(ctx : Context) : View(ctx) {
 
         fun handleTap() {
             cts.startUpdating {
-                animator.stop()
+                animator.start()
             }
         }
     }
