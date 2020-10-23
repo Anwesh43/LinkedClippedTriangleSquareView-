@@ -29,8 +29,59 @@ val strokeFactor : Float = 90f
 val sizeFactor : Float = 3.7f
 val delay : Long = 20
 val backColor : Int = Color.parseColor("#BDBDBD")
+val deg : Float = 90f
 
 fun Int.inverse() : Float = 1f / this
 fun Float.maxScale(i : Int, n : Int) : Float = Math.max(0f, this - i * n.inverse())
 fun Float.divideScale(i : Int, n : Int) : Float = Math.min(n.inverse(), maxScale(i, n)) * n
 fun Float.sinify() : Float = Math.sin(this * Math.PI).toFloat()
+
+fun Canvas.drawTriangleSquare(sf : Float, size : Float, paint : Paint) {
+    val sf1 : Float = sf.divideScale(0, parts)
+    val sf2 : Float = sf.divideScale(1, parts)
+    val sf3 : Float = sf.divideScale(2, parts)
+    val sf4 : Float = sf.divideScale(3, parts)
+    val sf5 : Float = sf.divideScale(4, parts)
+    drawLine(-size / 2, 0f, -size / 2 + size * 0.5f * sf1, size * 0.5f * sf1, paint)
+    drawLine(0f, size / 2, size * 0.5f * sf2, size / 2 - size * 0.5f * sf2, paint)
+    drawLine(size / 2, 0f, size / 2, -size * 0.5f * sf3, paint)
+    drawLine(size / 2, -size * 0.5f, size / 2 - size * sf4, -size * 0.5f, paint)
+    drawLine(-size / 2, -size / 2, size / 2, size * 0.5f * (sf5 - 1), paint)
+}
+
+fun Canvas.drawTriangleSquareFillPath(sf6 : Float, size : Float, paint : Paint) {
+    save()
+    val path : Path = Path()
+    path.moveTo(-size / 2, 0f)
+    path.lineTo(0f, size / 2)
+    path.lineTo(size / 2, 0f)
+    path.lineTo(size / 2, -size / 2)
+    path.lineTo(-size / 2, -size / 2)
+    path.lineTo(-size / 2, 0f)
+    clipPath(path)
+    drawRect(RectF(-size / 2, size / 2 - size * sf6, size / 2, size / 2), paint)
+    restore()
+}
+
+fun Canvas.drawClippedTriangleSquare(scale : Float, w : Float, h : Float, paint : Paint) {
+    val sf : Float = scale.sinify()
+    val sf6 : Float = sf.divideScale(5, parts)
+    val sf7 : Float = sf.divideScale(6, parts)
+    val size : Float = Math.min(w, h) / sizeFactor
+    save()
+    translate(w / 2, h / 2)
+    rotate(deg * sf7)
+    drawTriangleSquare(sf, size, paint)
+    drawTriangleSquareFillPath(sf6, size, paint)
+    restore()
+}
+
+fun Canvas.drawCTSNode(i : Int, scale : Float, paint : Paint) {
+    val w : Float = width.toFloat()
+    val h : Float = height.toFloat()
+    paint.color = colors[i]
+    paint.strokeCap = Paint.Cap.ROUND
+    paint.strokeWidth = Math.min(w, h) / strokeFactor
+    drawClippedTriangleSquare(scale, w, h, paint)
+}
+
